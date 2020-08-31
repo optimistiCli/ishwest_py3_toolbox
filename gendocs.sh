@@ -17,5 +17,5 @@ fi
 
 pdoc --html -f -o doc iwp3tb
 
-./cook_combined_md.py > README.md \
-    && echo "README.md updated"
+./cook_combined_md.py > README.md.temp \
+    && mv -v README.md.temp README.md

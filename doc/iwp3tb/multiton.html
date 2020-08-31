@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.8.4" />
+<title>iwp3tb.multiton API documentation</title>
+<meta name="description" content="A set of handy decorators for my beloved Singleton and Multiton design patterns …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js" integrity="sha256-eOgo0OtLL4cdq7RdwRUiGKLX9XsIJ7nGhWEKbohmVAQ=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>iwp3tb.multiton</code></h1>
+</header>
+<section id="section-intro">
+<p>A set of handy decorators for my beloved Singleton and Multiton design patterns.</p>
+<h2 id="concept">Concept</h2>
+<p>A multiton here is an abstract class, that has a finite number of
+implementations. Each implementation is instantiated just once and this
+instance is made available as an attribute of the parent multiton
+class.</p>
+<p>A singleton is basically a multiton that has only one implementation.
+Thus no need to separate the abstract class from private
+implementation.</p>
+<p>This approach allows for very private implementations while
+only the common interface becomes public.</p>
+<h2 id="examples">Examples</h2>
+<h3 id="basic-multiton">Basic Multiton</h3>
+<pre><code>from iwp3tb import multiton, implementation
+
+@multiton
+class PowerRaiser():
+    def raise_to_power(self, x: float) -&gt; float:
+        # This is an abstract method.
+        # Implementations should realise it.
+        raise Exception('You should have implemented this!')
+
+@implementation
+class Second(PowerRaiser):
+    def raise_to_power(self, x):
+        return x * x
+
+@implementation
+class Third(PowerRaiser):
+    def raise_to_power(self, x):
+        return x * x * x
+
+print(PowerRaiser.Second.raise_to_power(3))
+# prints out:
+# 9
+
+print(PowerRaiser.Third.raise_to_power(3))
+# prints out:
+# 27
+</code></pre>
+<h3 id="custom-multiton">Custom Multiton</h3>
+<p>Arbitrary instance names can be used.</p>
+<pre><code>from iwp3tb import multiton, implementation_named
+
+@multiton
+class PowerRaiser():
+    def raise_to_power(self, x: float) -&gt; float:
+        # This is an abstract method.
+        # Implementations should realise it.
+        raise Exception('You should have implemented this!')
+
+@implementation_named('power2')
+class Second(PowerRaiser):
+    def raise_to_power(self, x):
+        return x * x
+
+@implementation_named('power3')
+class Third(PowerRaiser):
+    def raise_to_power(self, x):
+        return x * x * x
+
+print(PowerRaiser.power2.raise_to_power(3))
+# prints out:
+# 9
+
+print(PowerRaiser.power3.raise_to_power(3))
+# prints out:
+# 27
+</code></pre>
+<h3 id="singleton">Singleton</h3>
+<pre><code>from iwp3tb import singleton
+
+@singleton
+class Squarer():
+    def to_square(self, x: float) -&gt; float:
+        return x * x
+
+print(Squarer.instance.to_square(3))
+# prints out:
+# 9
+</code></pre>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">#!/usr/bin/env python3
+
+&#34;&#34;&#34;A set of handy decorators for my beloved Singleton and Multiton design patterns.
+
+Concept
+-------
+
+A multiton here is an abstract class, that has a finite number of 
+implementations. Each implementation is instantiated just once and this
+instance is made available as an attribute of the parent multiton 
+class.
+
+A singleton is basically a multiton that has only one implementation. 
+Thus no need to separate the abstract class from private 
+implementation.
+
+This approach allows for very private implementations while 
+only the common interface becomes public.
+
+Examples
+--------
+
+### Basic Multiton
+
+```
+from iwp3tb import multiton, implementation
+
+@multiton
+class PowerRaiser():
+    def raise_to_power(self, x: float) -&gt; float:
+        # This is an abstract method.
+        # Implementations should realise it.
+        raise Exception(&#39;You should have implemented this!&#39;)
+
+@implementation
+class Second(PowerRaiser):
+    def raise_to_power(self, x):
+        return x * x
+
+@implementation
+class Third(PowerRaiser):
+    def raise_to_power(self, x):
+        return x * x * x
+
+print(PowerRaiser.Second.raise_to_power(3))
+# prints out:
+# 9
+
+print(PowerRaiser.Third.raise_to_power(3))
+# prints out:
+# 27
+```
+
+### Custom Multiton
+
+Arbitrary instance names can be used.
+
+```
+from iwp3tb import multiton, implementation_named
+
+@multiton
+class PowerRaiser():
+    def raise_to_power(self, x: float) -&gt; float:
+        # This is an abstract method.
+        # Implementations should realise it.
+        raise Exception(&#39;You should have implemented this!&#39;)
+
+@implementation_named(&#39;power2&#39;)
+class Second(PowerRaiser):
+    def raise_to_power(self, x):
+        return x * x
+
+@implementation_named(&#39;power3&#39;)
+class Third(PowerRaiser):
+    def raise_to_power(self, x):
+        return x * x * x
+
+print(PowerRaiser.power2.raise_to_power(3))
+# prints out:
+# 9
+
+print(PowerRaiser.power3.raise_to_power(3))
+# prints out:
+# 27
+```
+
+### Singleton
+
+```
+from iwp3tb import singleton
+
+@singleton
+class Squarer():
+    def to_square(self, x: float) -&gt; float:
+        return x * x
+
+print(Squarer.instance.to_square(3))
+# prints out:
+# 9
+```
+&#34;&#34;&#34;
+
+from iwp3tb import Ancestors
+
+_REGISTRAR_ATTR = &#39;_registrar_injection&#39;
+_SINGLETON_NAME = &#39;instance&#39;
+
+class MultitonError(Exception):
+    &#34;&#34;&#34;Common base class for multiton fatal errors.
+    &#34;&#34;&#34;
+
+    def __init__(self, a_string):
+        super().__init__(a_string)
+
+class NoRegistrarParent(MultitonError):
+    &#34;&#34;&#34;An error raised if a class is decorated as an implementation but it has no 
+    multiton parent.
+
+    ```
+    from iwp3tb import implementation
+    
+    @implementation
+    class BadImplementation():
+        pass
+    # Raises NoRegistrarParent
+    ```
+    &#34;&#34;&#34;
+
+    def __init__(self, a_class):
+        super().__init__(&#39;No registrar parent found for %s&#39; % str(a_class))
+
+class AlreadyHasRegistrarParent(MultitonError):
+    &#34;&#34;&#34;An error raised if a class is decorated as an multiton but it already has a 
+    multiton parent.
+
+    ```
+    from iwp3tb import multiton
+    
+    @multiton
+    class GoodMultiton():
+        pass
+    
+    @multiton
+    class BadMultiton(GoodMultiton):
+        pass
+    # Raises AlreadyHasRegistrarParent
+    ```
+    &#34;&#34;&#34;
+
+    def __init__(self, a_class, a_registrar):
+        super().__init__(&#39;Class %s already has a registrar parent in %s&#39; \
+                         % (str(a_class), str(a_registrar)))
+
+class RegistrarAlreadyHasAttribute(MultitonError):
+    &#34;&#34;&#34;An error raised if a naming conflict happens while registering an implementation 
+    with a multiton.
+
+    ```
+    from iwp3tb import multiton, implementation, implementation_named
+    
+    @multiton
+    class GoodMultiton():
+        pass
+    
+    @implementation
+    class GoodImplementation(GoodMultiton):
+        pass
+    
+    @implementation_named(&#39;GoodImplementation&#39;)
+    class BadImplementation(GoodMultiton):
+        pass
+    # Raises RegistrarAlreadyHasAttribute
+    ```
+    &#34;&#34;&#34;
+
+    def __init__(self, a_class, a_registrar, a_name):
+        super().__init__(&#39;Class %s can not be registered with registrar &#39; \
+                         &#39;parent %s since it already has attribute named %s &#39; \
+                         % (str(a_class), str(a_registrar), a_name))
+
+def _get_registrar(cls):
+    found = None
+    def _regHelper(c):
+        nonlocal found
+        found = getattr(c, _REGISTRAR_ATTR, None)
+        return found is not None
+    try:
+        return next(found for c in Ancestors(cls) if _regHelper(c))
+    except StopIteration:
+        return None
+
+def _register_as(cls, a_name):
+    registrar = _get_registrar(cls)
+    if registrar is None:
+        raise NoRegistrarParent(cls) from None
+    if hasattr(registrar, a_name):
+        raise RegistrarAlreadyHasAttribute(cls, registrar, a_name) from None
+    setattr(registrar, a_name, cls())
+    return cls
+
+def implementation(cls):
+    &#34;&#34;&#34;Class decorator that registers an implementation with a multiton 
+    ancestor class. Class name is used for the implementation instance name. 
+    The class name must not conflict with any of the multition attributes.
+    &#34;&#34;&#34;
+
+    _register_as(cls, cls.__name__)
+
+def implementation_named(a_name):
+    &#34;&#34;&#34;Class decorator that registers an implementation with a multiton 
+    ancestor class using a custom instance name. The class name must not 
+    conflict with any of the multition attributes.
+    &#34;&#34;&#34;
+
+    return lambda cls: _register_as(cls, a_name)
+
+def multiton(cls):
+    &#34;&#34;&#34;Class decorator for multiton. A multiton class should have no multition 
+    or singleton ancestors.
+    &#34;&#34;&#34;
+
+    registrar = _get_registrar(cls)
+    if registrar is not None:
+        raise AlreadyHasRegistrarParent(cls, registrar) from None
+    setattr(cls, _REGISTRAR_ATTR, cls)
+    return cls
+
+def singleton(cls):
+    &#34;&#34;&#34;Class decorator for singleton. A singleton class should have no 
+    multition or singleton ancestors.
+    &#34;&#34;&#34;
+
+    _register_as(multiton(cls), _SINGLETON_NAME)
+    return cls</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="iwp3tb.multiton.implementation"><code class="name flex">
+<span>def <span class="ident">implementation</span></span>(<span>cls)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Class decorator that registers an implementation with a multiton
+ancestor class. Class name is used for the implementation instance name.
+The class name must not conflict with any of the multition attributes.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def implementation(cls):
+    &#34;&#34;&#34;Class decorator that registers an implementation with a multiton 
+    ancestor class. Class name is used for the implementation instance name. 
+    The class name must not conflict with any of the multition attributes.
+    &#34;&#34;&#34;
+
+    _register_as(cls, cls.__name__)</code></pre>
+</details>
+</dd>
+<dt id="iwp3tb.multiton.implementation_named"><code class="name flex">
+<span>def <span class="ident">implementation_named</span></span>(<span>a_name)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Class decorator that registers an implementation with a multiton
+ancestor class using a custom instance name. The class name must not
+conflict with any of the multition attributes.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def implementation_named(a_name):
+    &#34;&#34;&#34;Class decorator that registers an implementation with a multiton 
+    ancestor class using a custom instance name. The class name must not 
+    conflict with any of the multition attributes.
+    &#34;&#34;&#34;
+
+    return lambda cls: _register_as(cls, a_name)</code></pre>
+</details>
+</dd>
+<dt id="iwp3tb.multiton.multiton"><code class="name flex">
+<span>def <span class="ident">multiton</span></span>(<span>cls)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Class decorator for multiton. A multiton class should have no multition
+or singleton ancestors.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def multiton(cls):
+    &#34;&#34;&#34;Class decorator for multiton. A multiton class should have no multition 
+    or singleton ancestors.
+    &#34;&#34;&#34;
+
+    registrar = _get_registrar(cls)
+    if registrar is not None:
+        raise AlreadyHasRegistrarParent(cls, registrar) from None
+    setattr(cls, _REGISTRAR_ATTR, cls)
+    return cls</code></pre>
+</details>
+</dd>
+<dt id="iwp3tb.multiton.singleton"><code class="name flex">
+<span>def <span class="ident">singleton</span></span>(<span>cls)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Class decorator for singleton. A singleton class should have no
+multition or singleton ancestors.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def singleton(cls):
+    &#34;&#34;&#34;Class decorator for singleton. A singleton class should have no 
+    multition or singleton ancestors.
+    &#34;&#34;&#34;
+
+    _register_as(multiton(cls), _SINGLETON_NAME)
+    return cls</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="iwp3tb.multiton.AlreadyHasRegistrarParent"><code class="flex name class">
+<span>class <span class="ident">AlreadyHasRegistrarParent</span></span>
+<span>(</span><span>a_class, a_registrar)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>An error raised if a class is decorated as an multiton but it already has a
+multiton parent.</p>
+<pre><code>from iwp3tb import multiton
+
+@multiton
+class GoodMultiton():
+    pass
+
+@multiton
+class BadMultiton(GoodMultiton):
+    pass
+# Raises AlreadyHasRegistrarParent
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AlreadyHasRegistrarParent(MultitonError):
+    &#34;&#34;&#34;An error raised if a class is decorated as an multiton but it already has a 
+    multiton parent.
+
+    ```
+    from iwp3tb import multiton
+    
+    @multiton
+    class GoodMultiton():
+        pass
+    
+    @multiton
+    class BadMultiton(GoodMultiton):
+        pass
+    # Raises AlreadyHasRegistrarParent
+    ```
+    &#34;&#34;&#34;
+
+    def __init__(self, a_class, a_registrar):
+        super().__init__(&#39;Class %s already has a registrar parent in %s&#39; \
+                         % (str(a_class), str(a_registrar)))</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="iwp3tb.multiton.MultitonError" href="#iwp3tb.multiton.MultitonError">MultitonError</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="iwp3tb.multiton.MultitonError"><code class="flex name class">
+<span>class <span class="ident">MultitonError</span></span>
+<span>(</span><span>a_string)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Common base class for multiton fatal errors.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MultitonError(Exception):
+    &#34;&#34;&#34;Common base class for multiton fatal errors.
+    &#34;&#34;&#34;
+
+    def __init__(self, a_string):
+        super().__init__(a_string)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="iwp3tb.multiton.AlreadyHasRegistrarParent" href="#iwp3tb.multiton.AlreadyHasRegistrarParent">AlreadyHasRegistrarParent</a></li>
+<li><a title="iwp3tb.multiton.NoRegistrarParent" href="#iwp3tb.multiton.NoRegistrarParent">NoRegistrarParent</a></li>
+<li><a title="iwp3tb.multiton.RegistrarAlreadyHasAttribute" href="#iwp3tb.multiton.RegistrarAlreadyHasAttribute">RegistrarAlreadyHasAttribute</a></li>
+</ul>
+</dd>
+<dt id="iwp3tb.multiton.NoRegistrarParent"><code class="flex name class">
+<span>class <span class="ident">NoRegistrarParent</span></span>
+<span>(</span><span>a_class)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>An error raised if a class is decorated as an implementation but it has no
+multiton parent.</p>
+<pre><code>from iwp3tb import implementation
+
+@implementation
+class BadImplementation():
+    pass
+# Raises NoRegistrarParent
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class NoRegistrarParent(MultitonError):
+    &#34;&#34;&#34;An error raised if a class is decorated as an implementation but it has no 
+    multiton parent.
+
+    ```
+    from iwp3tb import implementation
+    
+    @implementation
+    class BadImplementation():
+        pass
+    # Raises NoRegistrarParent
+    ```
+    &#34;&#34;&#34;
+
+    def __init__(self, a_class):
+        super().__init__(&#39;No registrar parent found for %s&#39; % str(a_class))</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="iwp3tb.multiton.MultitonError" href="#iwp3tb.multiton.MultitonError">MultitonError</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="iwp3tb.multiton.RegistrarAlreadyHasAttribute"><code class="flex name class">
+<span>class <span class="ident">RegistrarAlreadyHasAttribute</span></span>
+<span>(</span><span>a_class, a_registrar, a_name)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>An error raised if a naming conflict happens while registering an implementation
+with a multiton.</p>
+<pre><code>from iwp3tb import multiton, implementation, implementation_named
+
+@multiton
+class GoodMultiton():
+    pass
+
+@implementation
+class GoodImplementation(GoodMultiton):
+    pass
+
+@implementation_named('GoodImplementation')
+class BadImplementation(GoodMultiton):
+    pass
+# Raises RegistrarAlreadyHasAttribute
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class RegistrarAlreadyHasAttribute(MultitonError):
+    &#34;&#34;&#34;An error raised if a naming conflict happens while registering an implementation 
+    with a multiton.
+
+    ```
+    from iwp3tb import multiton, implementation, implementation_named
+    
+    @multiton
+    class GoodMultiton():
+        pass
+    
+    @implementation
+    class GoodImplementation(GoodMultiton):
+        pass
+    
+    @implementation_named(&#39;GoodImplementation&#39;)
+    class BadImplementation(GoodMultiton):
+        pass
+    # Raises RegistrarAlreadyHasAttribute
+    ```
+    &#34;&#34;&#34;
+
+    def __init__(self, a_class, a_registrar, a_name):
+        super().__init__(&#39;Class %s can not be registered with registrar &#39; \
+                         &#39;parent %s since it already has attribute named %s &#39; \
+                         % (str(a_class), str(a_registrar), a_name))</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="iwp3tb.multiton.MultitonError" href="#iwp3tb.multiton.MultitonError">MultitonError</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul>
+<li><a href="#concept">Concept</a></li>
+<li><a href="#examples">Examples</a><ul>
+<li><a href="#basic-multiton">Basic Multiton</a></li>
+<li><a href="#custom-multiton">Custom Multiton</a></li>
+<li><a href="#singleton">Singleton</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="iwp3tb" href="index.html">iwp3tb</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="iwp3tb.multiton.implementation" href="#iwp3tb.multiton.implementation">implementation</a></code></li>
+<li><code><a title="iwp3tb.multiton.implementation_named" href="#iwp3tb.multiton.implementation_named">implementation_named</a></code></li>
+<li><code><a title="iwp3tb.multiton.multiton" href="#iwp3tb.multiton.multiton">multiton</a></code></li>
+<li><code><a title="iwp3tb.multiton.singleton" href="#iwp3tb.multiton.singleton">singleton</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="iwp3tb.multiton.AlreadyHasRegistrarParent" href="#iwp3tb.multiton.AlreadyHasRegistrarParent">AlreadyHasRegistrarParent</a></code></h4>
+</li>
+<li>
+<h4><code><a title="iwp3tb.multiton.MultitonError" href="#iwp3tb.multiton.MultitonError">MultitonError</a></code></h4>
+</li>
+<li>
+<h4><code><a title="iwp3tb.multiton.NoRegistrarParent" href="#iwp3tb.multiton.NoRegistrarParent">NoRegistrarParent</a></code></h4>
+</li>
+<li>
+<h4><code><a title="iwp3tb.multiton.RegistrarAlreadyHasAttribute" href="#iwp3tb.multiton.RegistrarAlreadyHasAttribute">RegistrarAlreadyHasAttribute</a></code></h4>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.8.4</a>.</p>
+</footer>
+</body>
+</html>

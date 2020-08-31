@@ -16,3 +16,6 @@ exit 1
 fi
 
 pdoc --html -f -o doc iwp3tb
+
+./cook_combined_md.py > README.md \
+    && echo "README.md updated"

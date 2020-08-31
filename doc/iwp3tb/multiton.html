@@ -35,7 +35,7 @@ implementation.</p>
 only the common interface becomes public.</p>
 <h2 id="examples">Examples</h2>
 <h3 id="basic-multiton">Basic Multiton</h3>
-<pre><code>from iwp3tb import multiton, implementation
+<pre><code class="python">from iwp3tb import multiton, implementation
 
 @multiton
 class PowerRaiser():
@@ -64,7 +64,7 @@ print(PowerRaiser.Third.raise_to_power(3))
 </code></pre>
 <h3 id="custom-multiton">Custom Multiton</h3>
 <p>Arbitrary instance names can be used.</p>
-<pre><code>from iwp3tb import multiton, implementation_named
+<pre><code class="python">from iwp3tb import multiton, implementation_named
 
 @multiton
 class PowerRaiser():
@@ -92,7 +92,7 @@ print(PowerRaiser.power3.raise_to_power(3))
 # 27
 </code></pre>
 <h3 id="singleton">Singleton</h3>
-<pre><code>from iwp3tb import singleton
+<pre><code class="python">from iwp3tb import singleton
 
 @singleton
 class Squarer():
@@ -131,7 +131,7 @@ Examples
 
 ### Basic Multiton
 
-```
+```python
 from iwp3tb import multiton, implementation
 
 @multiton
@@ -164,7 +164,7 @@ print(PowerRaiser.Third.raise_to_power(3))
 
 Arbitrary instance names can be used.
 
-```
+```python
 from iwp3tb import multiton, implementation_named
 
 @multiton
@@ -195,7 +195,7 @@ print(PowerRaiser.power3.raise_to_power(3))
 
 ### Singleton
 
-```
+```python
 from iwp3tb import singleton
 
 @singleton
@@ -225,7 +225,7 @@ class NoRegistrarParent(MultitonError):
     &#34;&#34;&#34;An error raised if a class is decorated as an implementation but it has no 
     multiton parent.
 
-    ```
+    ```python
     from iwp3tb import implementation
     
     @implementation
@@ -242,7 +242,7 @@ class AlreadyHasRegistrarParent(MultitonError):
     &#34;&#34;&#34;An error raised if a class is decorated as an multiton but it already has a 
     multiton parent.
 
-    ```
+    ```python
     from iwp3tb import multiton
     
     @multiton
@@ -264,7 +264,7 @@ class RegistrarAlreadyHasAttribute(MultitonError):
     &#34;&#34;&#34;An error raised if a naming conflict happens while registering an implementation 
     with a multiton.
 
-    ```
+    ```python
     from iwp3tb import multiton, implementation, implementation_named
     
     @multiton
@@ -443,7 +443,7 @@ multition or singleton ancestors.</p></div>
 <dd>
 <div class="desc"><p>An error raised if a class is decorated as an multiton but it already has a
 multiton parent.</p>
-<pre><code>from iwp3tb import multiton
+<pre><code class="python">from iwp3tb import multiton
 
 @multiton
 class GoodMultiton():
@@ -462,7 +462,7 @@ class BadMultiton(GoodMultiton):
     &#34;&#34;&#34;An error raised if a class is decorated as an multiton but it already has a 
     multiton parent.
 
-    ```
+    ```python
     from iwp3tb import multiton
     
     @multiton
@@ -523,7 +523,7 @@ class BadMultiton(GoodMultiton):
 <dd>
 <div class="desc"><p>An error raised if a class is decorated as an implementation but it has no
 multiton parent.</p>
-<pre><code>from iwp3tb import implementation
+<pre><code class="python">from iwp3tb import implementation
 
 @implementation
 class BadImplementation():
@@ -538,7 +538,7 @@ class BadImplementation():
     &#34;&#34;&#34;An error raised if a class is decorated as an implementation but it has no 
     multiton parent.
 
-    ```
+    ```python
     from iwp3tb import implementation
     
     @implementation
@@ -565,7 +565,7 @@ class BadImplementation():
 <dd>
 <div class="desc"><p>An error raised if a naming conflict happens while registering an implementation
 with a multiton.</p>
-<pre><code>from iwp3tb import multiton, implementation, implementation_named
+<pre><code class="python">from iwp3tb import multiton, implementation, implementation_named
 
 @multiton
 class GoodMultiton():
@@ -588,7 +588,7 @@ class BadImplementation(GoodMultiton):
     &#34;&#34;&#34;An error raised if a naming conflict happens while registering an implementation 
     with a multiton.
 
-    ```
+    ```python
     from iwp3tb import multiton, implementation, implementation_named
     
     @multiton

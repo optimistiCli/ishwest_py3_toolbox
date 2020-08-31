@@ -4,7 +4,7 @@
 
 Example
 -------
-```
+```python
 from iwp3tb import Ancestors
 
 from andere.plek import Oma

@@ -22,7 +22,7 @@ Examples
 
 ### Basic Multiton
 
-```
+```python
 from iwp3tb import multiton, implementation
 
 @multiton
@@ -55,7 +55,7 @@ print(PowerRaiser.Third.raise_to_power(3))
 
 Arbitrary instance names can be used.
 
-```
+```python
 from iwp3tb import multiton, implementation_named
 
 @multiton
@@ -86,7 +86,7 @@ print(PowerRaiser.power3.raise_to_power(3))
 
 ### Singleton
 
-```
+```python
 from iwp3tb import singleton
 
 @singleton
@@ -116,7 +116,7 @@ class NoRegistrarParent(MultitonError):
     """An error raised if a class is decorated as an implementation but it has no 
     multiton parent.
 
-    ```
+    ```python
     from iwp3tb import implementation
     
     @implementation
@@ -133,7 +133,7 @@ class AlreadyHasRegistrarParent(MultitonError):
     """An error raised if a class is decorated as an multiton but it already has a 
     multiton parent.
 
-    ```
+    ```python
     from iwp3tb import multiton
     
     @multiton
@@ -155,7 +155,7 @@ class RegistrarAlreadyHasAttribute(MultitonError):
     """An error raised if a naming conflict happens while registering an implementation 
     with a multiton.
 
-    ```
+    ```python
     from iwp3tb import multiton, implementation, implementation_named
     
     @multiton

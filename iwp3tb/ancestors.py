@@ -37,7 +37,8 @@ from typing import Iterator, Iterable
 
 
 class Ancestors():
-    """An iterator for non-builtin ancestors of a class
+    """
+    An iterator for non-builtin ancestors of a class
 
     Goes recursively through all custom (i.e. not builtin) classes that
     the base class inherits from. The base class itself comes first in the 
@@ -50,7 +51,8 @@ class Ancestors():
 
 
     def __init__(self, a_class: type, a_include_self: bool=True):
-        """Parameters
+        """
+        Parameters
         ----------
         a_class : type
             The base class, who's ancestors we want to iterate through
@@ -72,13 +74,16 @@ class Ancestors():
 
 
     def __next__(self) -> type:
-        """Iterator interface method adapter"""
+        """
+        Iterator interface method adapter
+        """
 
         return self._next_worker()
 
 
     def _next_base_class(self) -> type:
-        """Iterator's __next__ implementatation that returns the base class and
+        """
+        Iterator's __next__ implementatation that returns the base class and
         passes the baton to another implementation.
         """
 
@@ -87,14 +92,16 @@ class Ancestors():
 
 
     def _next_exhausted(self):
-        """Terminal implementation of the Iterator's __next__ method.
+        """
+        Terminal implementation of the Iterator's __next__ method.
         """
 
         raise StopIteration() from None
 
 
     def _next_from_pool(self) -> type:
-        """Iterator's __next__ implementatation that goes through the pool of the
+        """
+        Iterator's __next__ implementatation that goes through the pool of the
         pool of the base class' ancestors and replaces it self with another 
         implementation once the pool is exhausted.
         """

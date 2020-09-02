@@ -106,14 +106,16 @@ _REGISTRAR_ATTR = '_registrar_injection'
 _SINGLETON_NAME = 'instance'
 
 class MultitonError(Exception):
-    """Common base class for multiton fatal errors.
+    """
+    Common base class for multiton fatal errors.
     """
 
     def __init__(self, a_string):
         super().__init__(a_string)
 
 class NoRegistrarParent(MultitonError):
-    """An error raised if a class is decorated as an implementation but it has no 
+    """
+    An error raised if a class is decorated as an implementation but it has no 
     multiton parent.
 
     ```python
@@ -130,7 +132,8 @@ class NoRegistrarParent(MultitonError):
         super().__init__('No registrar parent found for %s' % str(a_class))
 
 class AlreadyHasRegistrarParent(MultitonError):
-    """An error raised if a class is decorated as an multiton but it already has a 
+    """
+    An error raised if a class is decorated as an multiton but it already has a 
     multiton parent.
 
     ```python
@@ -152,7 +155,8 @@ class AlreadyHasRegistrarParent(MultitonError):
                          % (str(a_class), str(a_registrar)))
 
 class RegistrarAlreadyHasAttribute(MultitonError):
-    """An error raised if a naming conflict happens while registering an implementation 
+    """
+    An error raised if a naming conflict happens while registering an implementation 
     with a multiton.
 
     ```python
@@ -199,7 +203,8 @@ def _register_as(cls, a_name):
     return cls
 
 def implementation(cls):
-    """Class decorator that registers an implementation with a multiton 
+    """
+    Class decorator that registers an implementation with a multiton 
     ancestor class. Class name is used for the implementation instance name. 
     The class name must not conflict with any of the multition attributes.
     """
@@ -207,7 +212,8 @@ def implementation(cls):
     _register_as(cls, cls.__name__)
 
 def implementation_named(a_name):
-    """Class decorator that registers an implementation with a multiton 
+    """
+    Class decorator that registers an implementation with a multiton 
     ancestor class using a custom instance name. The class name must not 
     conflict with any of the multition attributes.
     """
@@ -215,7 +221,8 @@ def implementation_named(a_name):
     return lambda cls: _register_as(cls, a_name)
 
 def multiton(cls):
-    """Class decorator for multiton. A multiton class should have no multition 
+    """
+    Class decorator for multiton. A multiton class should have no multition 
     or singleton ancestors.
     """
 
@@ -226,7 +233,8 @@ def multiton(cls):
     return cls
 
 def singleton(cls):
-    """Class decorator for singleton. A singleton class should have no 
+    """
+    Class decorator for singleton. A singleton class should have no 
     multition or singleton ancestors.
     """
 

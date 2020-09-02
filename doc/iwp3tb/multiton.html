@@ -103,245 +103,7 @@ print(Squarer.instance.to_square(3))
 # prints out:
 # 9
 </code></pre>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">#!/usr/bin/env python3
-
-&#34;&#34;&#34;A set of handy decorators for my beloved Singleton and Multiton design patterns.
-
-Concept
--------
-
-A multiton here is an abstract class, that has a finite number of 
-implementations. Each implementation is instantiated just once and this
-instance is made available as an attribute of the parent multiton 
-class.
-
-A singleton is basically a multiton that has only one implementation. 
-Thus no need to separate the abstract class from private 
-implementation.
-
-This approach allows for very private implementations while 
-only the common interface becomes public.
-
-Examples
---------
-
-### Basic Multiton
-
-```python
-from iwp3tb import multiton, implementation
-
-@multiton
-class PowerRaiser():
-    def raise_to_power(self, x: float) -&gt; float:
-        # This is an abstract method.
-        # Implementations should realise it.
-        raise Exception(&#39;You should have implemented this!&#39;)
-
-@implementation
-class Second(PowerRaiser):
-    def raise_to_power(self, x):
-        return x * x
-
-@implementation
-class Third(PowerRaiser):
-    def raise_to_power(self, x):
-        return x * x * x
-
-print(PowerRaiser.Second.raise_to_power(3))
-# prints out:
-# 9
-
-print(PowerRaiser.Third.raise_to_power(3))
-# prints out:
-# 27
-```
-
-### Custom Multiton
-
-Arbitrary instance names can be used.
-
-```python
-from iwp3tb import multiton, implementation_named
-
-@multiton
-class PowerRaiser():
-    def raise_to_power(self, x: float) -&gt; float:
-        # This is an abstract method.
-        # Implementations should realise it.
-        raise Exception(&#39;You should have implemented this!&#39;)
-
-@implementation_named(&#39;power2&#39;)
-class Second(PowerRaiser):
-    def raise_to_power(self, x):
-        return x * x
-
-@implementation_named(&#39;power3&#39;)
-class Third(PowerRaiser):
-    def raise_to_power(self, x):
-        return x * x * x
-
-print(PowerRaiser.power2.raise_to_power(3))
-# prints out:
-# 9
-
-print(PowerRaiser.power3.raise_to_power(3))
-# prints out:
-# 27
-```
-
-### Singleton
-
-```python
-from iwp3tb import singleton
-
-@singleton
-class Squarer():
-    def to_square(self, x: float) -&gt; float:
-        return x * x
-
-print(Squarer.instance.to_square(3))
-# prints out:
-# 9
-```
-&#34;&#34;&#34;
-
-from iwp3tb import Ancestors
-
-_REGISTRAR_ATTR = &#39;_registrar_injection&#39;
-_SINGLETON_NAME = &#39;instance&#39;
-
-class MultitonError(Exception):
-    &#34;&#34;&#34;Common base class for multiton fatal errors.
-    &#34;&#34;&#34;
-
-    def __init__(self, a_string):
-        super().__init__(a_string)
-
-class NoRegistrarParent(MultitonError):
-    &#34;&#34;&#34;An error raised if a class is decorated as an implementation but it has no 
-    multiton parent.
-
-    ```python
-    from iwp3tb import implementation
-    
-    @implementation
-    class BadImplementation():
-        pass
-    # Raises NoRegistrarParent
-    ```
-    &#34;&#34;&#34;
-
-    def __init__(self, a_class):
-        super().__init__(&#39;No registrar parent found for %s&#39; % str(a_class))
-
-class AlreadyHasRegistrarParent(MultitonError):
-    &#34;&#34;&#34;An error raised if a class is decorated as an multiton but it already has a 
-    multiton parent.
-
-    ```python
-    from iwp3tb import multiton
-    
-    @multiton
-    class GoodMultiton():
-        pass
-    
-    @multiton
-    class BadMultiton(GoodMultiton):
-        pass
-    # Raises AlreadyHasRegistrarParent
-    ```
-    &#34;&#34;&#34;
-
-    def __init__(self, a_class, a_registrar):
-        super().__init__(&#39;Class %s already has a registrar parent in %s&#39; \
-                         % (str(a_class), str(a_registrar)))
-
-class RegistrarAlreadyHasAttribute(MultitonError):
-    &#34;&#34;&#34;An error raised if a naming conflict happens while registering an implementation 
-    with a multiton.
-
-    ```python
-    from iwp3tb import multiton, implementation, implementation_named
-    
-    @multiton
-    class GoodMultiton():
-        pass
-    
-    @implementation
-    class GoodImplementation(GoodMultiton):
-        pass
-    
-    @implementation_named(&#39;GoodImplementation&#39;)
-    class BadImplementation(GoodMultiton):
-        pass
-    # Raises RegistrarAlreadyHasAttribute
-    ```
-    &#34;&#34;&#34;
-
-    def __init__(self, a_class, a_registrar, a_name):
-        super().__init__(&#39;Class %s can not be registered with registrar &#39; \
-                         &#39;parent %s since it already has attribute named %s &#39; \
-                         % (str(a_class), str(a_registrar), a_name))
-
-def _get_registrar(cls):
-    found = None
-    def _regHelper(c):
-        nonlocal found
-        found = getattr(c, _REGISTRAR_ATTR, None)
-        return found is not None
-    try:
-        return next(found for c in Ancestors(cls) if _regHelper(c))
-    except StopIteration:
-        return None
-
-def _register_as(cls, a_name):
-    registrar = _get_registrar(cls)
-    if registrar is None:
-        raise NoRegistrarParent(cls) from None
-    if hasattr(registrar, a_name):
-        raise RegistrarAlreadyHasAttribute(cls, registrar, a_name) from None
-    setattr(registrar, a_name, cls())
-    return cls
-
-def implementation(cls):
-    &#34;&#34;&#34;Class decorator that registers an implementation with a multiton 
-    ancestor class. Class name is used for the implementation instance name. 
-    The class name must not conflict with any of the multition attributes.
-    &#34;&#34;&#34;
-
-    _register_as(cls, cls.__name__)
-
-def implementation_named(a_name):
-    &#34;&#34;&#34;Class decorator that registers an implementation with a multiton 
-    ancestor class using a custom instance name. The class name must not 
-    conflict with any of the multition attributes.
-    &#34;&#34;&#34;
-
-    return lambda cls: _register_as(cls, a_name)
-
-def multiton(cls):
-    &#34;&#34;&#34;Class decorator for multiton. A multiton class should have no multition 
-    or singleton ancestors.
-    &#34;&#34;&#34;
-
-    registrar = _get_registrar(cls)
-    if registrar is not None:
-        raise AlreadyHasRegistrarParent(cls, registrar) from None
-    setattr(cls, _REGISTRAR_ATTR, cls)
-    return cls
-
-def singleton(cls):
-    &#34;&#34;&#34;Class decorator for singleton. A singleton class should have no 
-    multition or singleton ancestors.
-    &#34;&#34;&#34;
-
-    _register_as(multiton(cls), _SINGLETON_NAME)
-    return cls</code></pre>
-</details>
+<div class="git-link-div"><a href="https://github.com/optimistiCli/ishwest_py3_toolbox/blob/0ae30f76b20d6ea0701699dfcb5b92291d7ffa5f/iwp3tb/multiton.py#L0-L241" class="git-link">Browse git</a></div>
 </section>
 <section>
 </section>
@@ -357,18 +119,7 @@ def singleton(cls):
 <div class="desc"><p>Class decorator that registers an implementation with a multiton
 ancestor class. Class name is used for the implementation instance name.
 The class name must not conflict with any of the multition attributes.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def implementation(cls):
-    &#34;&#34;&#34;Class decorator that registers an implementation with a multiton 
-    ancestor class. Class name is used for the implementation instance name. 
-    The class name must not conflict with any of the multition attributes.
-    &#34;&#34;&#34;
-
-    _register_as(cls, cls.__name__)</code></pre>
-</details>
+<div class="git-link-div"><a href="https://github.com/optimistiCli/ishwest_py3_toolbox/blob/0ae30f76b20d6ea0701699dfcb5b92291d7ffa5f/iwp3tb/multiton.py#L205-L212" class="git-link">Browse git</a></div>
 </dd>
 <dt id="iwp3tb.multiton.implementation_named"><code class="name flex">
 <span>def <span class="ident">implementation_named</span></span>(<span>a_name)</span>
@@ -377,18 +128,7 @@ The class name must not conflict with any of the multition attributes.</p></div>
 <div class="desc"><p>Class decorator that registers an implementation with a multiton
 ancestor class using a custom instance name. The class name must not
 conflict with any of the multition attributes.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def implementation_named(a_name):
-    &#34;&#34;&#34;Class decorator that registers an implementation with a multiton 
-    ancestor class using a custom instance name. The class name must not 
-    conflict with any of the multition attributes.
-    &#34;&#34;&#34;
-
-    return lambda cls: _register_as(cls, a_name)</code></pre>
-</details>
+<div class="git-link-div"><a href="https://github.com/optimistiCli/ishwest_py3_toolbox/blob/0ae30f76b20d6ea0701699dfcb5b92291d7ffa5f/iwp3tb/multiton.py#L214-L221" class="git-link">Browse git</a></div>
 </dd>
 <dt id="iwp3tb.multiton.multiton"><code class="name flex">
 <span>def <span class="ident">multiton</span></span>(<span>cls)</span>
@@ -396,21 +136,7 @@ conflict with any of the multition attributes.</p></div>
 <dd>
 <div class="desc"><p>Class decorator for multiton. A multiton class should have no multition
 or singleton ancestors.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def multiton(cls):
-    &#34;&#34;&#34;Class decorator for multiton. A multiton class should have no multition 
-    or singleton ancestors.
-    &#34;&#34;&#34;
-
-    registrar = _get_registrar(cls)
-    if registrar is not None:
-        raise AlreadyHasRegistrarParent(cls, registrar) from None
-    setattr(cls, _REGISTRAR_ATTR, cls)
-    return cls</code></pre>
-</details>
+<div class="git-link-div"><a href="https://github.com/optimistiCli/ishwest_py3_toolbox/blob/0ae30f76b20d6ea0701699dfcb5b92291d7ffa5f/iwp3tb/multiton.py#L223-L233" class="git-link">Browse git</a></div>
 </dd>
 <dt id="iwp3tb.multiton.singleton"><code class="name flex">
 <span>def <span class="ident">singleton</span></span>(<span>cls)</span>
@@ -418,92 +144,20 @@ or singleton ancestors.</p></div>
 <dd>
 <div class="desc"><p>Class decorator for singleton. A singleton class should have no
 multition or singleton ancestors.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def singleton(cls):
-    &#34;&#34;&#34;Class decorator for singleton. A singleton class should have no 
-    multition or singleton ancestors.
-    &#34;&#34;&#34;
-
-    _register_as(multiton(cls), _SINGLETON_NAME)
-    return cls</code></pre>
-</details>
+<div class="git-link-div"><a href="https://github.com/optimistiCli/ishwest_py3_toolbox/blob/0ae30f76b20d6ea0701699dfcb5b92291d7ffa5f/iwp3tb/multiton.py#L235-L242" class="git-link">Browse git</a></div>
 </dd>
 </dl>
 </section>
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="iwp3tb.multiton.AlreadyHasRegistrarParent"><code class="flex name class">
-<span>class <span class="ident">AlreadyHasRegistrarParent</span></span>
-<span>(</span><span>a_class, a_registrar)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>An error raised if a class is decorated as an multiton but it already has a
-multiton parent.</p>
-<pre><code class="python">from iwp3tb import multiton
-
-@multiton
-class GoodMultiton():
-    pass
-
-@multiton
-class BadMultiton(GoodMultiton):
-    pass
-# Raises AlreadyHasRegistrarParent
-</code></pre></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class AlreadyHasRegistrarParent(MultitonError):
-    &#34;&#34;&#34;An error raised if a class is decorated as an multiton but it already has a 
-    multiton parent.
-
-    ```python
-    from iwp3tb import multiton
-    
-    @multiton
-    class GoodMultiton():
-        pass
-    
-    @multiton
-    class BadMultiton(GoodMultiton):
-        pass
-    # Raises AlreadyHasRegistrarParent
-    ```
-    &#34;&#34;&#34;
-
-    def __init__(self, a_class, a_registrar):
-        super().__init__(&#39;Class %s already has a registrar parent in %s&#39; \
-                         % (str(a_class), str(a_registrar)))</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li><a title="iwp3tb.multiton.MultitonError" href="#iwp3tb.multiton.MultitonError">MultitonError</a></li>
-<li>builtins.Exception</li>
-<li>builtins.BaseException</li>
-</ul>
-</dd>
 <dt id="iwp3tb.multiton.MultitonError"><code class="flex name class">
 <span>class <span class="ident">MultitonError</span></span>
 <span>(</span><span>a_string)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Common base class for multiton fatal errors.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class MultitonError(Exception):
-    &#34;&#34;&#34;Common base class for multiton fatal errors.
-    &#34;&#34;&#34;
-
-    def __init__(self, a_string):
-        super().__init__(a_string)</code></pre>
-</details>
+<div class="git-link-div"><a href="https://github.com/optimistiCli/ishwest_py3_toolbox/blob/0ae30f76b20d6ea0701699dfcb5b92291d7ffa5f/iwp3tb/multiton.py#L108-L114" class="git-link">Browse git</a></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>builtins.Exception</li>
@@ -530,27 +184,33 @@ class BadImplementation():
     pass
 # Raises NoRegistrarParent
 </code></pre></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class NoRegistrarParent(MultitonError):
-    &#34;&#34;&#34;An error raised if a class is decorated as an implementation but it has no 
-    multiton parent.
+<div class="git-link-div"><a href="https://github.com/optimistiCli/ishwest_py3_toolbox/blob/0ae30f76b20d6ea0701699dfcb5b92291d7ffa5f/iwp3tb/multiton.py#L116-L132" class="git-link">Browse git</a></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="iwp3tb.multiton.MultitonError" href="#iwp3tb.multiton.MultitonError">MultitonError</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="iwp3tb.multiton.AlreadyHasRegistrarParent"><code class="flex name class">
+<span>class <span class="ident">AlreadyHasRegistrarParent</span></span>
+<span>(</span><span>a_class, a_registrar)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>An error raised if a class is decorated as an multiton but it already has a
+multiton parent.</p>
+<pre><code class="python">from iwp3tb import multiton
 
-    ```python
-    from iwp3tb import implementation
-    
-    @implementation
-    class BadImplementation():
-        pass
-    # Raises NoRegistrarParent
-    ```
-    &#34;&#34;&#34;
+@multiton
+class GoodMultiton():
+    pass
 
-    def __init__(self, a_class):
-        super().__init__(&#39;No registrar parent found for %s&#39; % str(a_class))</code></pre>
-</details>
+@multiton
+class BadMultiton(GoodMultiton):
+    pass
+# Raises AlreadyHasRegistrarParent
+</code></pre></div>
+<div class="git-link-div"><a href="https://github.com/optimistiCli/ishwest_py3_toolbox/blob/0ae30f76b20d6ea0701699dfcb5b92291d7ffa5f/iwp3tb/multiton.py#L134-L155" class="git-link">Browse git</a></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="iwp3tb.multiton.MultitonError" href="#iwp3tb.multiton.MultitonError">MultitonError</a></li>
@@ -580,37 +240,7 @@ class BadImplementation(GoodMultiton):
     pass
 # Raises RegistrarAlreadyHasAttribute
 </code></pre></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class RegistrarAlreadyHasAttribute(MultitonError):
-    &#34;&#34;&#34;An error raised if a naming conflict happens while registering an implementation 
-    with a multiton.
-
-    ```python
-    from iwp3tb import multiton, implementation, implementation_named
-    
-    @multiton
-    class GoodMultiton():
-        pass
-    
-    @implementation
-    class GoodImplementation(GoodMultiton):
-        pass
-    
-    @implementation_named(&#39;GoodImplementation&#39;)
-    class BadImplementation(GoodMultiton):
-        pass
-    # Raises RegistrarAlreadyHasAttribute
-    ```
-    &#34;&#34;&#34;
-
-    def __init__(self, a_class, a_registrar, a_name):
-        super().__init__(&#39;Class %s can not be registered with registrar &#39; \
-                         &#39;parent %s since it already has attribute named %s &#39; \
-                         % (str(a_class), str(a_registrar), a_name))</code></pre>
-</details>
+<div class="git-link-div"><a href="https://github.com/optimistiCli/ishwest_py3_toolbox/blob/0ae30f76b20d6ea0701699dfcb5b92291d7ffa5f/iwp3tb/multiton.py#L157-L183" class="git-link">Browse git</a></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="iwp3tb.multiton.MultitonError" href="#iwp3tb.multiton.MultitonError">MultitonError</a></li>
@@ -651,13 +281,13 @@ class BadImplementation(GoodMultiton):
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="iwp3tb.multiton.AlreadyHasRegistrarParent" href="#iwp3tb.multiton.AlreadyHasRegistrarParent">AlreadyHasRegistrarParent</a></code></h4>
-</li>
-<li>
 <h4><code><a title="iwp3tb.multiton.MultitonError" href="#iwp3tb.multiton.MultitonError">MultitonError</a></code></h4>
 </li>
 <li>
 <h4><code><a title="iwp3tb.multiton.NoRegistrarParent" href="#iwp3tb.multiton.NoRegistrarParent">NoRegistrarParent</a></code></h4>
+</li>
+<li>
+<h4><code><a title="iwp3tb.multiton.AlreadyHasRegistrarParent" href="#iwp3tb.multiton.AlreadyHasRegistrarParent">AlreadyHasRegistrarParent</a></code></h4>
 </li>
 <li>
 <h4><code><a title="iwp3tb.multiton.RegistrarAlreadyHasAttribute" href="#iwp3tb.multiton.RegistrarAlreadyHasAttribute">RegistrarAlreadyHasAttribute</a></code></h4>

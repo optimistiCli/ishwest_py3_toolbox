@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+DEFAULT_PDOC_TEMPLATES_DIR='pdoc_templates'
+
 if [ -n "$PDOC_PYENV" ] ; then
     . "${PDOC_PYENV}/bin/activate"
 fi
@@ -15,7 +17,19 @@ EOE
 exit 1
 fi
 
-pdoc --html -f -o doc iwp3tb
+if [ -n "$PDOC_TEMPLATES" ] ; then
+    EFFECTIVE_TEMPLATES_DIR="$PDOC_TEMPLATES"
+elif ls -l ./"$DEFAULT_PDOC_TEMPLATES_DIR"/*.mako >/dev/null 2>/dev/null ; then
+    EFFECTIVE_TEMPLATES_DIR="./$DEFAULT_PDOC_TEMPLATES_DIR"
+fi
 
+if [ -n "$EFFECTIVE_TEMPLATES_DIR" ] ; then
+    TEMPLATES_OPT="--template-dir $EFFECTIVE_TEMPLATES_DIR"
+    echo "Pdoc templates dir: $EFFECTIVE_TEMPLATES_DIR"
+fi
+
+pdoc --html -f $TEMPLATES_OPT -o doc iwp3tb
+
+export EFFECTIVE_TEMPLATES_DIR
 ./cook_combined_md.py > README.md.temp \
     && mv -v README.md.temp README.md

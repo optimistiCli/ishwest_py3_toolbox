@@ -1,30 +1,54 @@
 #!/usr/bin/env python3
 
 import re
+import os
+import sys
 import pdoc
 
-def _fix_headers(s):
-    return re.sub(
-        r'(?:^\s*(.*?)\s*\n(?:(=+)|(?:-+))\s*$)|(?:^(\s*)##(#*\s+.*?)$)', 
-        lambda m: '%s####%s' % (m[3], m[4]) if m[3] is not None \
-                  else '%s %s' % (
-                      '###' if m[2] is not None \
-                          else '####',
-                      m[1]
-                      ), 
-        s, 
-        flags=re.M,
-        )
+templ_dir_var='EFFECTIVE_TEMPLATES_DIR'
 
-insert_md = '\n\n'.join([_fix_headers(m.text()) for m in pdoc.Module('iwp3tb').submodules()])
+
+if templ_dir_var in os.environ:
+    pdoc.tpl_lookup.directories.clear()
+    pdoc.tpl_lookup.directories.append(os.environ[templ_dir_var])
+
+generated_md = '\n\n'.join([ m.text() for m in pdoc.Module('iwp3tb').submodules() ])
 
 with open('README.md') as f:
     readme = f.read()
 
-print(re.sub(
-        r'^(##\s+sub\W?modules)\s*$.*?^(##\s+)',
-        r'\1\n%s\n\2' % insert_md,
-        readme,
-        flags=re.M + re.I + re.S,
-        )
-    )
+m = re.search(r'(.*?^#\s+[^\n]+?)\s*$.*?^((?:##\s+)(?!Module\b).*)',
+              readme,
+              flags=re.M + re.I + re.S,
+              )
+
+first_line = m[1]
+rest_of = m[2].rstrip()
+
+title_counter = {}
+
+def number_title(s):
+    if s in title_counter:
+        title_counter[s] += 1
+        return '%s-%i' % (s, title_counter[s])
+    else:
+        title_counter[s] = 0
+        return s
+
+toc = ''
+
+for h_level, h_title in re.findall(r'(#{2,})\s+(.+)\b',
+                            re.sub(r'`{3}.*?`{3}', '', generated_md + rest_of, flags=re.M + re.S)
+                           ):
+    level = len(h_level)
+    anch = number_title(re.sub(r'[^\w\-]+', 
+                               '', 
+                               re.sub(r'\s+', 
+                                      '-', 
+                                      h_title.lower(),
+                                      )
+                               )
+                        )
+    toc += '%s- [%s](#%s)\n' % ('  ' * (level - 2), h_title, anch)
+
+print('%s\n\n%s\n\n%s\n\n\n\%s' % (first_line, toc, generated_md, rest_of))

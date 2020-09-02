@@ -51,4 +51,4 @@ for h_level, h_title in re.findall(r'(#{2,})\s+(.+)\b',
                         )
     toc += '%s- [%s](#%s)\n' % ('  ' * (level - 2), h_title, anch)
 
-print('%s\n\n%s\n\n%s\n\n\n\%s' % (first_line, toc, generated_md, rest_of))
+print('%s\n\n%s\n\n%s\n\n\n%s' % (first_line, toc, generated_md, rest_of))

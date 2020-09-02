@@ -305,7 +305,7 @@ class BadImplementation(GoodMultiton):
 * builtins.BaseException
 
 
-\## Tools
+## Tools
 `gendocs.sh`
 : Generates html documentation from source files using [pdoc](https://pdoc3.github.io/pdoc/).
 

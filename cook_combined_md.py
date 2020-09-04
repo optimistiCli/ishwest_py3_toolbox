@@ -17,7 +17,7 @@ generated_md = '\n\n'.join([ m.text() for m in pdoc.Module('iwp3tb').submodules(
 with open('README.md') as f:
     readme = f.read()
 
-m = re.search(r'(.*?^#\s+[^\n]+?)\s*$.*?^((?:##\s+)(?!Module\b).*)',
+m = re.search(r'(^.*?^##\s+Table of Contents)\s*$.*?^((?:##\s+)(?!Module\b).*)',
               readme,
               flags=re.M + re.I + re.S,
               )

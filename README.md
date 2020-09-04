@@ -1,5 +1,9 @@
 # Ish West Python 3 Toolbox
 
+A collection of random handy tools.
+
+## Table of Contents
+
 - [Module iwp3tb.ancestors](#module-iwp3tbancestors)
   - [Example](#example)
   - [Class Ancestors](#class-ancestors)
@@ -24,6 +28,10 @@
   - [Class RegistrarAlreadyHasAttribute](#class-registraralreadyhasattribute)
     - [Ancestors](#ancestors-3)
 - [Tools](#tools)
+  - [Docs generator](#docs-generator)
+    - [Pdoc Virtual Environment](#pdoc-virtual-environment)
+    - [Pdoc Templates](#pdoc-templates)
+  - [Unit Tests](#unit-tests)
 
 
 ## Module iwp3tb.ancestors
@@ -306,8 +314,30 @@ class BadImplementation(GoodMultiton):
 
 
 ## Tools
+
+### Docs generator
+
 `gendocs.sh`
-: Generates html documentation from source files using [pdoc](https://pdoc3.github.io/pdoc/).
+
+Generates html documentation from source files using 
+[pdoc](https://pdoc3.github.io/pdoc/) and saves it to `docs/` dir. Also 
+calls `cook_combined_md.py` to generate MarkDown version of the documentation 
+and then inserts it into `README.md` (this file).
+
+#### Pdoc Virtual Environment
+
+If you point the `PDOC_PYENV` environment variable to a Python venv with pdoc 
+installed in it then all documentation generation will take place in this 
+virtual environment.
+
+#### Pdoc Templates
+
+Templates from `pdoc_templates/` are used to generate documentation. 
+Alternatively you can set `PDOC_TEMPLATES` environment variable to point to an
+alternative templates dir.
+
+### Unit Tests
 
 `runtests.sh`
-: Runs unit tests.
+
+Runs unit tests.
